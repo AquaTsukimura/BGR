@@ -25,3 +25,5 @@ local function requireLua(mod)
     end
   end
 end
+
+requireLua("BaseMain.lua")
