@@ -26,4 +26,4 @@ local function requireLua(mod)
   end
 end
 
-requireLua("BaseMain.lua")
+requireLua("PlayerManager.lua")
