@@ -65,16 +65,64 @@ end
 
 function GUIWindow:SetXPosition(pos)
     self.win.Position = UDim2.new(pos[1], pos[2], self.win.Position.Y.Scale, self.win.Position.Y.Offset)
-    return self
 end
 
 function GUIWindow:SetYPosition(pos)
     self.win.Position = UDim2.new(self.win.Position.X.Scale, self.win.Position.X.Offset, pos[1], pos[2])
-    return self
 end
 
 function GUIWindow:SetWidth(size)
-    
+    if vType(size) ~= 'table' then
+        print('[AQUA] BAD ARGS TO GUIWindow::SetWidth, size is not a table!')
+        return
+    end
+
+    if #size < 2 then
+        print('[AQUA] BAD ARGS TO GUIWindow::SetWidth, size requires a statement like GUIWindow::SetWidth({1, -50})')
+        return
+    end
+
+    local scale = size[1]
+    local offset = size[2]
+
+    if type(scale) ~= 'number' or type(offset) ~= 'number' then
+        print('[AQUA] BAD ARGS: scale and offset should be numbers.')
+        return
+    end
+
     local currentSize = self.win.Size
-    self.win.Size = UDim2.new(currentSize.X.Scale, size[2], currentSize.Y.Scale, currentSize.Y.Offset)
+    if not currentSize or type(currentSize) ~= 'userdata' then
+        print('[AQUA] Invalid current size.')
+        return
+    end
+
+    self.win.Size = UDim2.new(scale, offset, currentSize.Y.Scale, currentSize.Y.Offset)
+end
+
+function GUIWindow:SetHeight(size)
+    if vType(size) ~= 'table' then
+        print('[AQUA] BAD ARGS TO GUIWindow::SetHeight, size is not a table!')
+        return
+    end
+
+    if #size < 2 then
+        print('[AQUA] BAD ARGS TO GUIWindow::SetHeight, size requires a statement like GUIWindow::SetHeight({1, -50})')
+        return
+    end
+
+    local scale = size[1]
+    local offset = size[2]
+
+    if type(scale) ~= 'number' or type(offset) ~= 'number' then
+        print('[AQUA] BAD ARGS: scale and offset should be numbers.')
+        return
+    end
+
+    local currentSize = self.win.Size
+    if not currentSize or type(currentSize) ~= 'userdata' then
+        print('[AQUA] Invalid current size.')
+        return
+    end
+
+    self.win.Size = UDim2.new(currentSize.X.Scale, currentSize.X.Offset, scale, offset)
 end
