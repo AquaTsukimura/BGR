@@ -5,15 +5,25 @@ local function requireLua(mod)
       return
     end
     local loadLua = function(code)
-      local succ, err = pcall(loadFunc, code, "=(@BGR)")
-      if not succ then
+      local succ, err = loadFunc(code, "=(@BGR)")
+      if succ then
+        local success, error = pcall(succ)
+        if success then
+          print("[AQUA] No runtime errors occured.")
+        else
+          print("[AQUA] Runtime error: ", error)
+        end
+      else
         print(err)
-        return nil, err
       end
     end
     local rootPath = "https://github.com/AquaTsukimura/BGR/blob/main/"
     local fullPath = rootPath .. tostring(mod)
     if game then
+      if not game.HttpGet then
+        print("[AQUA : SCRIPT_EXCEPTION] game.HttpGet not exist!")
+        return
+      end
       local succ, datOrErr = pcall(game.HttpGet, game, fullPath)
       if succ then
         loadLua(datOrErr)
@@ -27,3 +37,4 @@ local function requireLua(mod)
 end
 
 requireLua("PlayerManager.lua")
+requireLua("GUIManager.lua")
