@@ -10,6 +10,7 @@ local GUIType = {
     ScrollableLayout = 7
 }
 
+
 function GUIManager:createGUIWindow(type, name)
     local guiObject = Instance.new("ScreenGui")
     guiObject.Name = name or "GUIWindow"
@@ -38,42 +39,10 @@ function GUIManager:createGUIWindow(type, name)
 
     local obj = {
         Gui = guiObject,
-        Main = mainElement
+        win = mainElement
     }
 
-    function obj:SetDragStyle(enabled)
-        if enabled then
-            local dragging = false
-            local dragInput, dragStart, startPos
-
-            local function update(input)
-                local delta = input.Position - dragStart
-                self.Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
-                                                 startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-            end
-
-            self.Main.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                    dragging = true
-                    dragStart = input.Position
-                    startPos = self.Main.Position
-                    input.Changed:Connect(function()
-                        if input.UserInputState == Enum.UserInputState.End then
-                            dragging = false
-                        end
-                    end)
-                end
-            end)
-
-            self.Main.InputChanged:Connect(function(input)
-                if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-                    update(input)
-                end
-            end)
-        end
-        return self
-    end
+    setmetatable(obj, { __index = GUIObjectPrototype })
 
     return obj
 end
-
